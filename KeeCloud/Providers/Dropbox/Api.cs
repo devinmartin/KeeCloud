@@ -12,20 +12,27 @@ namespace KeeCloud.Providers.Dropbox
 
         This is done to prevent bots from scraping the keys from the source code posted on the web.
         */
-        public const string consumerKey = "dummy";
-        public const string consumerSecret = "dummy";
+
+        /// <summary>
+        /// This is the App key provided by Dropbox
+        /// </summary>
+        const string appKey = "dummy";
+        /// <summary>
+        /// This is the App secret provided by Dropbox
+        /// </summary>
+        const string appSecret = "dummy";
 
         public static DropNetClient Client
         {
             get
             {
-                return new DropNetClient(consumerKey, consumerSecret);
+                return new DropNetClient(appKey, appSecret);
             }
         }
 
         public static DropNetClient AuthenticatedClient(NetworkCredential credential)
         {
-            return new DropNetClient(consumerKey, consumerSecret, credential.UserName, credential.Password);
+            return new DropNetClient(appKey, appSecret, credential.UserName, credential.Password);
         }
     }
 }
