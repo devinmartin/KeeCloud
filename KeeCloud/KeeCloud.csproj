@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{967E2FA7-FB8F-4578-9A90-8D32B476671A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KeeCloud</RootNamespace>
+    <AssemblyName>KeeCloud</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DUMMY;DEVELOPING</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AWSSDK">
+      <HintPath>..\packages\AWSSDK.1.5.12.0\lib\AWSSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="DropNet">
+      <HintPath>..\packages\DropNet.1.9.3\lib\net35\DropNet.dll</HintPath>
+    </Reference>
+    <Reference Include="KeePass" />
+    <Reference Include="RestSharp, Version=102.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DropNet.1.9.3\lib\net35\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Forms\FormAuthorizationSuccess.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAuthorizationSuccess.Designer.cs">
+      <DependentUpon>FormAuthorizationSuccess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAwaitAuthorization.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAwaitAuthorization.Designer.cs">
+      <DependentUpon>FormAwaitAuthorization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSelectProvider.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSelectProvider.Designer.cs">
+      <DependentUpon>FormSelectProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Providers\CredentialClaimResult.cs" />
+    <Compile Include="Forms\FormCredentialWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCredentialWizard.Designer.cs">
+      <DependentUpon>FormCredentialWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Providers\Dropbox\DropboxCredentialConfigurationProvider.cs" />
+    <Compile Include="Providers\Dropbox\Api.cs" />
+    <Compile Include="Providers\Dummy\DummyConfiguration.cs" />
+    <Compile Include="Providers\Dummy\DummyProvider.cs" />
+    <Compile Include="Providers\ICredentialConfigurationProvider.cs" />
+    <Compile Include="Providers\InitializeResult.cs" />
+    <Compile Include="Providers\IProvider.cs" />
+    <Compile Include="KeeCloudFileExt.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProviderRegistry.cs" />
+    <Compile Include="Providers\Amazon\AmazonS3Provider.cs" />
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StandardProtectedStrings.cs" />
+    <Compile Include="Utilities\AsyncOperationWithSynchronizationContext.cs" />
+    <Compile Include="Utilities\DatabaseHelpers.cs" />
+    <Compile Include="WebRequests\SuccessWebResponse.cs" />
+    <Compile Include="WebRequests\ProviderWebRequest.cs" />
+    <Compile Include="Providers\Dropbox\DropboxProvider.cs" />
+    <Compile Include="ProviderItem.cs" />
+    <Compile Include="WebRequests\ProviderWebRequestCreator.cs" />
+    <Compile Include="WebRequests\GetWebResponse.cs" />
+    <Compile Include="WebRequests\RequestStream.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\FormAuthorizationSuccess.resx">
+      <DependentUpon>FormAuthorizationSuccess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAwaitAuthorization.resx">
+      <DependentUpon>FormAwaitAuthorization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCredentialWizard.resx">
+      <DependentUpon>FormCredentialWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSelectProvider.resx">
+      <DependentUpon>FormSelectProvider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Content Include="Images\key_go.png" />
+  </ItemGroup>
+</Project>

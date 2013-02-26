@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeCloud", "KeeCloud\KeeCloud.csproj", "{967E2FA7-FB8F-4578-9A90-8D32B476671A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{967E2FA7-FB8F-4578-9A90-8D32B476671A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{967E2FA7-FB8F-4578-9A90-8D32B476671A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{967E2FA7-FB8F-4578-9A90-8D32B476671A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{967E2FA7-FB8F-4578-9A90-8D32B476671A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = KeeCloud\KeeCloud.csproj
+	EndGlobalSection
+EndGlobal
