@@ -84,7 +84,6 @@ namespace KeeCloud.WebRequests
             var basicCredential = this.Credentials.GetCredential(this.requestUri, "basic");
             if (basicCredential != null &&
                 !string.IsNullOrEmpty(basicCredential.UserName) &&
-                string.IsNullOrEmpty(basicCredential.Password) &&
                 this.host != null &&
                 this.host.Database.IsOpen)
             {
