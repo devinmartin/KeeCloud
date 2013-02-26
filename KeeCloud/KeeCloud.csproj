@@ -91,6 +91,7 @@
     <Compile Include="StandardProtectedStrings.cs" />
     <Compile Include="Utilities\AsyncOperationWithSynchronizationContext.cs" />
     <Compile Include="Utilities\DatabaseHelpers.cs" />
+    <Compile Include="WebRequests\EntryCredentials.cs" />
     <Compile Include="WebRequests\SuccessWebResponse.cs" />
     <Compile Include="WebRequests\ProviderWebRequest.cs" />
     <Compile Include="Providers\Dropbox\DropboxProvider.cs" />

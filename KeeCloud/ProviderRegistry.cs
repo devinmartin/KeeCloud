@@ -1,4 +1,5 @@
 ﻿using KeeCloud.WebRequests;
+using KeePass.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,6 @@ namespace KeeCloud
 {
     public class ProviderRegistry
     {
-        static readonly object registrationSync = new object();
-        static bool isRegistered = false;
-
         public static IEnumerable<ProviderItem> SupportedWebRequests
         {
             get
@@ -30,18 +28,12 @@ namespace KeeCloud
         /// <summary>
         /// Register all supported prefixes with the .net framework
         /// </summary>
-        public static void RegisterAllIFRequired()
+        public static void RegisterAllWithContext(IPluginHost host)
         {
-            lock (registrationSync)
+            var creator = new ProviderWebRequestCreator(host);
+            foreach (var supported in SupportedWebRequests)
             {
-                if (!isRegistered)
-                {
-                    isRegistered = true;
-                    foreach (var supported in SupportedWebRequests)
-                    {
-                        ProviderWebRequest.RegisterPrefix(supported.Protocol + ":", ProviderWebRequestCreator.Instance);
-                    }
-                }
+                ProviderWebRequest.RegisterPrefix(supported.Protocol + ":", creator);
             }
         }
 

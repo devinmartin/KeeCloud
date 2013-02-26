@@ -14,6 +14,7 @@ namespace KeeCloud
         public override bool Initialize(IPluginHost host)
         {
 #if DEVELOPING
+            // Obviously you can attatch directly to the KeePass process from Visual Studio as well if you prefer
             try
             {
                 if (!Debugger.IsAttached)
@@ -28,7 +29,7 @@ namespace KeeCloud
 
             this.wizardItem = host.MainWindow.ToolsMenu.DropDown.Items.Add("URL Credential Wizard", Resource1.key_go, (sender, e) => this.LaunchWizard());
 
-            ProviderRegistry.RegisterAllIFRequired();
+            ProviderRegistry.RegisterAllWithContext(host);
             return true;
         }
 

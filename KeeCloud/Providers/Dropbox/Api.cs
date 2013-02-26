@@ -16,11 +16,11 @@ namespace KeeCloud.Providers.Dropbox
         /// <summary>
         /// This is the App key provided by Dropbox
         /// </summary>
-        const string appKey = "dummy";
+        const string appKey = "lmtap1z523irkms";
         /// <summary>
         /// This is the App secret provided by Dropbox
         /// </summary>
-        const string appSecret = "dummy";
+        const string appSecret = "2v9k5xze6f9r0ua";
 
         public static DropNetClient Client
         {
