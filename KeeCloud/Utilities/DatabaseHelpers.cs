@@ -9,7 +9,7 @@ namespace KeeCloud.Utilities
     {
         public static IEnumerable<PwGroup> GetAllGroups(this PwDatabase database)
         {
-            return Flatten<PwGroup>(database.RootGroup, _ => _.Groups);
+            return Flatten<PwGroup>(database.RootGroup, node => node.Groups);
         }
 
         public static IEnumerable<PwEntry> GetAllPasswords(this PwDatabase database)
@@ -25,8 +25,14 @@ namespace KeeCloud.Utilities
             if (getSubEnumerable != null)
             {
                 foreach (var subNode in getSubEnumerable(node))
+                {
                     yield return subNode;
+                    foreach (var subSubNode in Flatten<T>(subNode, getSubEnumerable))
+                        yield return subSubNode;
+                }
             }
+            else
+                throw new Exception();
         }
 
         public static bool EntryStringEquals(this PwEntry entry, string key, string expectedValue)
