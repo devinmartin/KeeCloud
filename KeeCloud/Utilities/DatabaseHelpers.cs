@@ -31,8 +31,6 @@ namespace KeeCloud.Utilities
                         yield return subSubNode;
                 }
             }
-            else
-                throw new Exception();
         }
 
         public static bool EntryStringEquals(this PwEntry entry, string key, string expectedValue)

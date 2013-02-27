@@ -11,16 +11,20 @@ namespace KeeCloud.Providers.Dropbox
         and get your own keys.
 
         This is done to prevent bots from scraping the keys from the source code posted on the web.
+         
+        Every now and then an accidental checkin of keys may occur, but these are all dummy applications
+        created specifically for development that are deleted frequently and limited to the developer,
+        never the real production keys.
         */
 
         /// <summary>
         /// This is the App key provided by Dropbox
         /// </summary>
-        const string appKey = "lmtap1z523irkms";
+        const string appKey = "dummy";
         /// <summary>
         /// This is the App secret provided by Dropbox
         /// </summary>
-        const string appSecret = "2v9k5xze6f9r0ua";
+        const string appSecret = "dummy";
 
         public static DropNetClient Client
         {

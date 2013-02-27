@@ -35,7 +35,7 @@ namespace KeeCloud.Forms
                 BannerStyle.Default,
                 Resource1.key_go,
                 this.Text,
-                "Enter a URL to go through the authentication process");
+                "Select a service to go through the authentication process");
 
             this.Icon = host.MainWindow.Icon;
 
@@ -44,7 +44,12 @@ namespace KeeCloud.Forms
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you wish to cancel?", "Are you sure?", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+            if (this.wizardState != WizardState.UrlEntry)
+            {
+                if (MessageBox.Show("Are you sure you wish to cancel?", "Are you sure?", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                    this.Close();
+            }
+            else
                 this.Close();
         }
 
