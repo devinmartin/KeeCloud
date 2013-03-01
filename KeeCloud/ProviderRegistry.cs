@@ -3,6 +3,7 @@ using KeePass.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace KeeCloud
 {
@@ -15,6 +16,7 @@ namespace KeeCloud
                 // add a new yield return with a protocol prefix and a delegate to create for each supported handler in the plugin
                 yield return new ProviderItem("dropbox", () => new KeeCloud.Providers.Dropbox.DropboxProvider());
                 yield return new ProviderItem("s3", () => new KeeCloud.Providers.Amazon.AmazonS3Provider());
+                yield return new ProviderItem("boxnet", () => new KeeCloud.Providers.BoxNet.BoxNetProvider());
 
 
                 // this is a dummy provider used mainly for testing the UI of the credential configuration wizard
@@ -33,7 +35,10 @@ namespace KeeCloud
             var creator = new ProviderWebRequestCreator(host);
             foreach (var supported in SupportedWebRequests)
             {
-                ProviderWebRequest.RegisterPrefix(supported.Protocol + ":", creator);
+                // register with the .net webrequest a protocol. When KeePass gets a WebRequest for the
+                // specified protocol .net will use the ProviderWebRequestCreator to create a specialized
+                // web request for the given protocol.
+                WebRequest.RegisterPrefix(supported.Protocol + ":", creator);
             }
         }
 

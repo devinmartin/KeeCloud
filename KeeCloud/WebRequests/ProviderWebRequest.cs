@@ -9,6 +9,9 @@ using System.Net;
 
 namespace KeeCloud.WebRequests
 {
+    /// <summary>
+    /// Custom web request that uses an IProvider to perform its web operations
+    /// </summary>
     public class ProviderWebRequest : WebRequest
     {
         private readonly Uri requestUri;
@@ -63,8 +66,11 @@ namespace KeeCloud.WebRequests
             }
             else if ((this.Method ?? string.Empty).ToLowerInvariant() == "post")
             {
-                this.provider.Put(this.requestStream.GetReadableStream(), this.GetCredentials());
-                return new SuccessWebResponse();
+                using (var stream = this.requestStream.GetReadableStream())
+                {
+                    this.provider.Put(stream, this.GetCredentials());
+                    return new SuccessWebResponse();
+                }
             }
             else
             {

@@ -1,7 +1,8 @@
-﻿using KeeCloud.Providers;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using KeeCloud.Providers;
+using KeeCloud.Utilities;
 
 namespace KeeCloud.Forms
 {
@@ -24,8 +25,12 @@ namespace KeeCloud.Forms
         public FormSelectProvider()
         {
             InitializeComponent();
-            this.comboBoxProviders.DisplayMember = "FriendlyName";
-            this.comboBoxProviders.DataSource = ProviderRegistry.SupportedWebRequests.Select(wr => new DataItem(wr)).Where(wr => wr.Provider.CanConfigureCredentials).ToArray();
+
+            this.comboBoxProviders.DisplayMember = ReflectionHelpers.MemberNameFromExpression<DataItem, string>(i => i.FriendlyName);
+
+            this.comboBoxProviders.DataSource = ProviderRegistry.SupportedWebRequests.Select(wr => new DataItem(wr))
+                .Where(wr => wr.Provider.CanConfigureCredentials)
+                .OrderBy(i => i.FriendlyName).ToArray();
         }
 
         private void comboBoxProviders_SelectedIndexChanged(object sender, EventArgs e)

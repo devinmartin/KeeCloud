@@ -15,6 +15,9 @@ namespace KeeCloud.WebRequests
 
         public WebRequest Create(Uri uri)
         {
+            // this method is called by the .net framework when it wants a specialized
+            // web request for a registered non-standard protocol.  KeeCloud has only one
+            // specialized WebRequest type, but we pass a provider into the web reqeust.
             var supported = ProviderRegistry.GetProviderForUri(uri);
             return new ProviderWebRequest(uri, supported.Create(uri), this.host);
         }

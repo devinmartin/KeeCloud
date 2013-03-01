@@ -37,6 +37,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AWSSDK.1.5.12.0\lib\AWSSDK.dll</HintPath>
     </Reference>
+    <Reference Include="BoxSync.Core">
+      <HintPath>..\lib\BoxSync.Core.dll</HintPath>
+    </Reference>
     <Reference Include="DropNet, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DropNet.1.9.3\lib\net35\DropNet.dll</HintPath>
@@ -49,6 +52,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -71,6 +75,7 @@
     <Compile Include="Forms\FormSelectProvider.Designer.cs">
       <DependentUpon>FormSelectProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="Providers\BoxNet\Api.cs" />
     <Compile Include="Providers\CredentialClaimResult.cs" />
     <Compile Include="Forms\FormCredentialWizard.cs">
       <SubType>Form</SubType>
@@ -80,6 +85,8 @@
     </Compile>
     <Compile Include="Providers\Dropbox\DropboxCredentialConfigurationProvider.cs" />
     <Compile Include="Providers\Dropbox\Api.cs" />
+    <Compile Include="Providers\BoxNet\BoxNetCredentialConfigurationProvider.cs" />
+    <Compile Include="Providers\BoxNet\BoxNetProvider.cs" />
     <Compile Include="Providers\Dummy\DummyConfiguration.cs" />
     <Compile Include="Providers\Dummy\DummyProvider.cs" />
     <Compile Include="Providers\ICredentialConfigurationProvider.cs" />
@@ -97,6 +104,7 @@
     <Compile Include="StandardProtectedStrings.cs" />
     <Compile Include="Utilities\AsyncOperationWithSynchronizationContext.cs" />
     <Compile Include="Utilities\DatabaseHelpers.cs" />
+    <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="WebRequests\EntryCredentials.cs" />
     <Compile Include="WebRequests\SuccessWebResponse.cs" />
     <Compile Include="WebRequests\ProviderWebRequest.cs" />
