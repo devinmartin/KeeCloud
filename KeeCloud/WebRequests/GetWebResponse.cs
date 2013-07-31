@@ -15,5 +15,8 @@ namespace KeeCloud.WebRequests
         {
             return this.stream;
         }
+
+        // mono needs this but .NET does not
+        public override WebHeaderCollection Headers { get { return null; } }
     }
 }
