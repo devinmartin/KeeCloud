@@ -18,12 +18,13 @@ namespace KeeCloud.WebRequests
         private readonly IProvider provider;
         private IPluginHost host;
 
-        RequestStream requestStream = new RequestStream();
+        RequestStream requestStream;
 
         public ProviderWebRequest(Uri uri, IProvider provider, IPluginHost host)
         {
             this.Headers = new WebHeaderCollection();
 
+            this.requestStream = new RequestStream(this);
             this.requestUri = uri;
             this.provider = provider;
             this.host = host;

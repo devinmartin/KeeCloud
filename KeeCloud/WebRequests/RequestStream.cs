@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KeePassLib.Native;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,21 @@ namespace KeeCloud.WebRequests
 {
     class RequestStream : Stream
     {
+        private readonly ProviderWebRequest _request;
+
+        public RequestStream(ProviderWebRequest request)
+        {
+            _request = request;
+        }
+
+        public override void Close()
+        {
+            if (NativeLib.IsUnix()) // mono does not automatically call GetResponse
+            {
+                _request.GetResponse();
+            }
+        }
+
         List<byte> bytes = new List<byte>();
         public override bool CanRead
         {
