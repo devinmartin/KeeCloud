@@ -8,19 +8,20 @@ namespace KeeCloud.WebRequests
 {
     class RequestStream : Stream
     {
-        private readonly ProviderWebRequest _request;
+        private readonly ProviderWebRequest request;
 
         public RequestStream(ProviderWebRequest request)
         {
-            _request = request;
+            this.request = request;
         }
 
         public override void Close()
         {
             if (NativeLib.IsUnix()) // mono does not automatically call GetResponse
             {
-                _request.GetResponse();
+                this.request.GetResponse();
             }
+            base.Close();
         }
 
         List<byte> bytes = new List<byte>();

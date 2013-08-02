@@ -16,12 +16,13 @@ namespace KeeCloud
                 // add a new yield return with a protocol prefix and a delegate to create for each supported handler in the plugin
                 yield return new ProviderItem("dropbox", () => new KeeCloud.Providers.Dropbox.DropboxProvider());
                 yield return new ProviderItem("s3", () => new KeeCloud.Providers.Amazon.AmazonS3Provider());
-                yield return new ProviderItem("boxnet", () => new KeeCloud.Providers.BoxNet.BoxNetProvider());
 
+#if ALL_PROVIDERS
+
+                yield return new ProviderItem("boxnet", () => new KeeCloud.Providers.BoxNet.BoxNetProvider());
 
                 // this is a dummy provider used mainly for testing the UI of the credential configuration wizard
                 // as well as the base web request logic
-#if DUMMY
                 yield return new ProviderItem("dummy", () => new KeeCloud.Providers.Dummy.DummyProvider());
 #endif
             }
