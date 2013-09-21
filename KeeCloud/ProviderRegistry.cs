@@ -16,6 +16,7 @@ namespace KeeCloud
                 // add a new yield return with a protocol prefix and a delegate to create for each supported handler in the plugin
                 yield return new ProviderItem("dropbox", () => new KeeCloud.Providers.Dropbox.DropboxProvider());
                 yield return new ProviderItem("s3", () => new KeeCloud.Providers.Amazon.AmazonS3Provider());
+                yield return new ProviderItem("google", () => new KeeCloud.Providers.Google.GoogleProvider());
 
 #if ALL_PROVIDERS
 

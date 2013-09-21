@@ -33,28 +33,31 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK, Version=1.5.12.0, Culture=neutral, PublicKeyToken=cd2d24cd2bace800, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AWSSDK.1.5.12.0\lib\AWSSDK.dll</HintPath>
-    </Reference>
     <Reference Include="BoxSync.Core">
       <HintPath>..\lib\BoxSync.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DropNet, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DropNet.1.9.3\lib\net35\DropNet.dll</HintPath>
-    </Reference>
     <Reference Include="KeePass" />
-    <Reference Include="RestSharp, Version=102.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DropNet.1.9.3\lib\net35\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="AWSSDK">
+      <HintPath>..\packages\AWSSDK.1.5.12.0\lib\AWSSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="DropNet">
+      <HintPath>..\packages\DropNet.1.9.3\lib\net35\DropNet.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\DropNet.1.9.3\lib\net35\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client">
+      <HintPath>..\packages\Google.GData.Client.2.2.0.0\lib\Google.GData.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Forms\FormAuthorizationSuccess.cs">
@@ -113,6 +116,7 @@
     <Compile Include="WebRequests\ProviderWebRequestCreator.cs" />
     <Compile Include="WebRequests\GetWebResponse.cs" />
     <Compile Include="WebRequests\RequestStream.cs" />
+    <Compile Include="Providers\Google\GoogleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -146,5 +150,8 @@
   -->
   <ItemGroup>
     <Content Include="Images\key_go.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Providers\Google\" />
   </ItemGroup>
 </Project>
