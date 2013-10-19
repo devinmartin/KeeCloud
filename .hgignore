@@ -5,3 +5,6 @@ obj/*
 *.user
 *.orig
 TestResults
+packages/
+!packages/repositories.config
+msbuild.log
