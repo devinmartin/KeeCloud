@@ -108,13 +108,20 @@ namespace KeeCloud.Providers.Amazon
             bucket = uri.OriginalString.Substring(uri.Scheme.Length + 3, uri.Authority.Length);
             key = uri.AbsolutePath.TrimStart('/');
             var queryParams = HttpUtility.ParseQueryString(uri.Query);
-            if (queryParams.Get("region") == null)
+            var regionName = queryParams.Get("region");
+            if (regionName == null)
             {
                 region = RegionEndpoint.GetBySystemName(DEFAULT_S3_REGION_SYSTEM_NAME);
             }
             else
             {
-                region = RegionEndpoint.GetBySystemName(queryParams.Get("region"));
+                // KeePass appends ".tmp" to the uri during sync, remove it from the region and append to key
+                if (regionName.EndsWith(".tmp")) 
+                { 
+                    regionName = regionName.Remove(regionName.Length - 4);
+                    key = key + ".tmp";
+                }
+                region = RegionEndpoint.GetBySystemName(regionName);
             }
         }
 
