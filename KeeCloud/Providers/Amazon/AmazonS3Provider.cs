@@ -1,9 +1,11 @@
-﻿using Amazon.Runtime;
+﻿using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using System;
 using System.IO;
 using System.Net;
+using System.Web;
 
 namespace KeeCloud.Providers.Amazon
 {
@@ -13,12 +15,13 @@ namespace KeeCloud.Providers.Amazon
 
         Stream IProvider.Get(ICredentials credentials)
         {
-            using (var client = this.GetClient(credentials))
-            {
-                string bucket;
-                string key;
-                this.GetBucketAndKey(out bucket, out key);
+            string bucket;
+            string key;
+            RegionEndpoint region;
+            this.GetBucketAndKey(out bucket, out key, out region);
 
+            using (var client = this.GetClient(credentials, region))
+            {
                 var request = new GetObjectRequest().WithBucketName(bucket).WithKey(key);
 
                 var response = client.GetObject(request);
@@ -32,12 +35,13 @@ namespace KeeCloud.Providers.Amazon
 
         void IProvider.Put(Stream stream, ICredentials credentials)
         {
-            using (var client = this.GetClient(credentials))
-            {
-                string bucket;
-                string key;
-                this.GetBucketAndKey(out bucket, out key);
+            string bucket;
+            string key;
+            RegionEndpoint region;
+            this.GetBucketAndKey(out bucket, out key, out region);
 
+            using (var client = this.GetClient(credentials, region))
+            {
                 var request = new PutObjectRequest().WithBucketName(bucket).WithKey(key);
 
                 request.InputStream = stream;
@@ -47,12 +51,13 @@ namespace KeeCloud.Providers.Amazon
 
         public void Delete(ICredentials credentials)
         {
-            using (var client = this.GetClient(credentials))
-            {
-                string bucket;
-                string key;
-                this.GetBucketAndKey(out bucket, out key);
+            string bucket;
+            string key;
+            RegionEndpoint region;
+            this.GetBucketAndKey(out bucket, out key, out region);
 
+            using (var client = this.GetClient(credentials, region))
+            {
                 var request = new DeleteObjectRequest().WithBucketName(bucket).WithKey(key);
 
                 client.DeleteObject(request);
@@ -61,13 +66,14 @@ namespace KeeCloud.Providers.Amazon
 
         void IProvider.Move(Uri destination, ICredentials credentials)
         {
-            using (var client = this.GetClient(credentials))
+            string bucket;
+            string sourceKey;
+            RegionEndpoint region;
+            this.GetBucketAndKey(out bucket, out sourceKey, out region);
+            using (var client = this.GetClient(credentials, region))
             {
-                string bucket;
-                string sourceKey;
                 string destinationKey;
-                this.GetBucketAndKey(out bucket, out sourceKey);
-                AmazonS3Provider.GetBucketAndKey(destination, out bucket, out destinationKey);
+                AmazonS3Provider.GetBucketAndKey(destination, out bucket, out destinationKey, out region);
 
                 var request = new CopyObjectRequest().WithSourceBucket(bucket)
                     .WithDestinationBucket(bucket)
@@ -88,22 +94,40 @@ namespace KeeCloud.Providers.Amazon
 
         string IProvider.FriendlyName { get { return "Amazon S3"; } }
 
-        private AmazonS3Client GetClient(ICredentials credentials)
+        private AmazonS3Client GetClient(ICredentials credentials, RegionEndpoint region)
         {
             var basicCredential = credentials.GetCredential(this.Uri, "basic");
-            var client = new AmazonS3Client(new BasicAWSCredentials(basicCredential.UserName, basicCredential.Password));
+            var client = new AmazonS3Client(new BasicAWSCredentials(basicCredential.UserName, basicCredential.Password), region);
             return client;
         }
 
-        private static void GetBucketAndKey(Uri uri, out string bucket, out string key)
+        private const string DEFAULT_S3_REGION_SYSTEM_NAME = "us-east-1";
+
+        private static void GetBucketAndKey(Uri uri, out string bucket, out string key, out RegionEndpoint region)
         {
             bucket = uri.OriginalString.Substring(uri.Scheme.Length + 3, uri.Authority.Length);
-            key = uri.PathAndQuery.TrimStart('/');
+            key = uri.AbsolutePath.TrimStart('/');
+            var queryParams = HttpUtility.ParseQueryString(uri.Query);
+            var regionName = queryParams.Get("region");
+            if (regionName == null)
+            {
+                region = RegionEndpoint.GetBySystemName(DEFAULT_S3_REGION_SYSTEM_NAME);
+            }
+            else
+            {
+                // KeePass appends ".tmp" to the uri during sync, remove it from the region and append to key
+                if (regionName.EndsWith(".tmp")) 
+                { 
+                    regionName = regionName.Remove(regionName.Length - 4);
+                    key = key + ".tmp";
+                }
+                region = RegionEndpoint.GetBySystemName(regionName);
+            }
         }
 
-        private void GetBucketAndKey(out string bucket, out string key)
+        private void GetBucketAndKey(out string bucket, out string key, out RegionEndpoint region)
         {
-            AmazonS3Provider.GetBucketAndKey(this.Uri, out bucket, out key);
+            AmazonS3Provider.GetBucketAndKey(this.Uri, out bucket, out key, out region);
         }
 
         private void CopyStream(Stream input, Stream output)
