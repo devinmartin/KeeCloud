@@ -47,6 +47,12 @@ namespace KeeCloud.WebRequests
 
         public override bool PreAuthenticate { get; set; }
 
+        public override string ConnectionGroupName { get; set; }
+
+        public override int Timeout { get; set; }
+
+        public override IWebProxy Proxy { get; set; }
+
         public override Stream GetRequestStream()
         {
             return this.requestStream;
