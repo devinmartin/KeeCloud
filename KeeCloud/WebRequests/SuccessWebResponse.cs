@@ -16,5 +16,11 @@ namespace KeeCloud.WebRequests
         {
             this.stream.Dispose();
         }
+
+		public override void Close()
+		{
+			this.stream.Close();
+		}
+
     }
 }
