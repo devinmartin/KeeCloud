@@ -77,12 +77,12 @@ namespace KeeCloud.Forms
             if (show)
             {
                 this.buttonShow.Text = "Hide Password";
-                this.labelPassword.Text = this.claimResult.Password;
+                this.textBoxPassword.Text = this.claimResult.Password;
             }
             else
             {
                 this.buttonShow.Text = "Show Password";
-                this.labelPassword.Text = string.Empty.PadLeft(this.claimResult.Password.Length, '*');
+                this.textBoxPassword.Text = string.Empty.PadLeft(this.claimResult.Password.Length, '*');
             }
             this.shown = show;
         }

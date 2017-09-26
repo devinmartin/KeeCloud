@@ -4,7 +4,7 @@ using BoxSync.Core.ServiceReference;
 
 namespace KeeCloud.Providers.BoxNet
 {
-    public class BoxNetCredentialConfigurationProvider : ICredentialConfigurationProvider
+    public class BoxNetCredentialConfigurationProvider : IOAuth1CredentialConfigurationProvider
     {
         string ticket;
         InitializeResult ICredentialConfigurationProvider.Initialize()
@@ -29,7 +29,7 @@ namespace KeeCloud.Providers.BoxNet
             return new Uri(string.Format(Api.BaseAuthorizationUrl, this.ticket));
         }
 
-        CredentialClaimResult ICredentialConfigurationProvider.Claim()
+        CredentialClaimResult IOAuth1CredentialConfigurationProvider.Claim()
         {
             var client = Api.Client;
 

@@ -31,7 +31,7 @@
             this.labelUsernameHeader = new System.Windows.Forms.Label();
             this.labelPasswordHeader = new System.Windows.Forms.Label();
             this.labelUsername = new System.Windows.Forms.Label();
-            this.labelPassword = new System.Windows.Forms.Label();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.buttonShow = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -63,14 +63,17 @@
             this.labelUsername.TabIndex = 2;
             this.labelUsername.Text = "uname";
             // 
-            // labelPassword
+            // textBoxPassword
             // 
-            this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(83, 88);
-            this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(23, 13);
-            this.labelPassword.TabIndex = 3;
-            this.labelPassword.Text = "****";
+            this.textBoxPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPassword.Location = new System.Drawing.Point(86, 88);
+            this.textBoxPassword.Multiline = true;
+            this.textBoxPassword.Name = "textBoxPassword";
+            this.textBoxPassword.ReadOnly = true;
+            this.textBoxPassword.Size = new System.Drawing.Size(377, 37);
+            this.textBoxPassword.TabIndex = 3;
+            this.textBoxPassword.TabStop = false;
+            this.textBoxPassword.Text = "****";
             // 
             // buttonShow
             // 
@@ -98,7 +101,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonShow);
-            this.Controls.Add(this.labelPassword);
+            this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.labelUsername);
             this.Controls.Add(this.labelPasswordHeader);
             this.Controls.Add(this.labelUsernameHeader);
@@ -114,7 +117,7 @@
         private System.Windows.Forms.Label labelUsernameHeader;
         private System.Windows.Forms.Label labelPasswordHeader;
         private System.Windows.Forms.Label labelUsername;
-        private System.Windows.Forms.Label labelPassword;
+        private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.Button buttonShow;
         private System.Windows.Forms.Button buttonSave;
     }

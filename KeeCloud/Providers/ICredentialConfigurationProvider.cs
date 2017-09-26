@@ -16,9 +16,5 @@ namespace KeeCloud.Providers
         /// Launch the external authorization process
         /// </summary>
         Uri GetExternalAuthorizationUrl();
-        /// <summary>
-        /// Upon success of external authorization, attempt to make a claim
-        /// </summary>
-        CredentialClaimResult Claim();
     }
 }

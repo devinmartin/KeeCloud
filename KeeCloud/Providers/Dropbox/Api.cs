@@ -1,5 +1,8 @@
-﻿using DropNet;
+﻿using System;
 using System.Net;
+using System.Net.Http;
+
+using Dropbox.Api;
 
 namespace KeeCloud.Providers.Dropbox
 {
@@ -26,17 +29,32 @@ namespace KeeCloud.Providers.Dropbox
         /// </summary>
         const string appSecret = "dummy";
 
-        public static DropNetClient Client
+        private static HttpClient httpClient = new HttpClient(new WebRequestHandler { ReadWriteTimeout = 10 * 1000 })
         {
-            get
-            {
-                return new DropNetClient(appKey, appSecret);
-            }
+            // Specify request level timeout which decides maximum time that can be spent on
+            // download/upload files.
+            Timeout = TimeSpan.FromMinutes(1)
+        };
+
+        public static Uri GetAuthorizeUri(string state)
+        {
+            return DropboxOAuth2Helper.GetAuthorizeUri(Api.appKey);
         }
 
-        public static DropNetClient AuthenticatedClient(NetworkCredential credential)
+        public static string ProcessCodeFlow(string code)
         {
-            return new DropNetClient(appKey, appSecret, credential.UserName, credential.Password);
+            var task = DropboxOAuth2Helper.ProcessCodeFlowAsync(code, appKey, appSecret, client: httpClient);
+            var resp = task.Result;
+            return resp.AccessToken;
+        }
+
+        public static DropboxClient AuthenticatedClient(NetworkCredential credential)
+        {
+            var config = new DropboxClientConfig("KeeCloud")
+            {
+                HttpClient = httpClient
+            };
+            return new DropboxClient(credential.Password, config);
         }
     }
 }

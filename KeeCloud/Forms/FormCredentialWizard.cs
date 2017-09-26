@@ -13,11 +13,13 @@ namespace KeeCloud.Forms
         private enum WizardState
         {
             UrlEntry,
+            ExchangeCode,
             AwaitingAuthorization,
             Success
         }
 
         readonly FormSelectProvider selectionForm = new FormSelectProvider();
+        readonly FormExchangeCode exchangeForm = new FormExchangeCode();
         readonly FormAwaitAuthorization authorizationForm = new FormAwaitAuthorization();
         readonly FormAuthorizationSuccess successForm;
         ICredentialConfigurationProvider credentialConfigurationProvier;
@@ -77,9 +79,17 @@ namespace KeeCloud.Forms
                         LaunchUrl(this.credentialConfigurationProvier.GetExternalAuthorizationUrl());
 
                         this.panelContainer.Controls.Remove(this.selectionForm);
-                        this.panelContainer.Controls.Add(this.authorizationForm);
-                        // invoke authentication process
-                        this.wizardState = WizardState.AwaitingAuthorization;
+                        if (this.credentialConfigurationProvier is IOAuth1CredentialConfigurationProvider)
+                        {
+                            this.panelContainer.Controls.Add(this.authorizationForm);
+                            // invoke authentication process
+                            this.wizardState = WizardState.AwaitingAuthorization;
+                        }
+                        else if (this.credentialConfigurationProvier is IOAuth2CredentialConfigurationProvider)
+                        {
+                            this.panelContainer.Controls.Add(this.exchangeForm);
+                            this.wizardState = WizardState.ExchangeCode;
+                        }
                     },
                         // catch
                     ecxeption =>
@@ -95,44 +105,88 @@ namespace KeeCloud.Forms
                     urlOperation.Run();
 
                     break;
-                case WizardState.AwaitingAuthorization:
-                    this.BackgroundDisplay(true);
-                    CredentialClaimResult result = null;
-                    var awaitingAuthorizationOperation = new AsyncOperationWithSynchronizationContext(() =>
+                case WizardState.ExchangeCode:
                     {
-                        result = this.credentialConfigurationProvier.Claim();
-                    },
+                        this.BackgroundDisplay(true);
+                        CredentialClaimResult result = null;
+                        var exchangeCodeOperation = new AsyncOperationWithSynchronizationContext(() =>
+                        {
+                            var provider = this.credentialConfigurationProvier as IOAuth2CredentialConfigurationProvider;
+                            result = provider.ExchangeCode(this.exchangeForm.textBoxCode.Text);
+                        },
                         // continuation
-                    () =>
-                    {
-                        if (result.IsSuccess)
+                        () =>
                         {
-                            this.panelContainer.Controls.Remove(this.authorizationForm);
-                            this.successForm.SetResult(result, this.selectionForm.SelectedProvider);
-                            this.panelContainer.Controls.Add(this.successForm);
-                            this.wizardState = WizardState.Success;
-                            this.buttonCancel.Visible = false;
-                            this.buttonNext.Text = "Done";
-                        }
-                        else
-                        {
-                            MessageBox.Show("Couldn't authorize with account", "Error");
-                            this.StartOver();
-                        }
-                    },
+                            if (result.IsSuccess)
+                            {
+                                this.panelContainer.Controls.Remove(this.exchangeForm);
+                                this.successForm.SetResult(result, this.selectionForm.SelectedProvider);
+                                this.panelContainer.Controls.Add(this.successForm);
+                                this.wizardState = WizardState.Success;
+                                this.buttonCancel.Visible = false;
+                                this.buttonNext.Text = "Done";
+                            }
+                            else
+                            {
+                                MessageBox.Show("Couldn't exchange authorization code for an access token", "Error");
+                                this.StartOver();
+                            }
+                        },
                         // catch
-                    ecxeption =>
-                    {
-                        MessageBox.Show(ecxeption.Message, "Error");
-                        this.StartOver();
-                    },
+                        ecxeption =>
+                        {
+                            MessageBox.Show(ecxeption.Message, "Error");
+                            this.StartOver();
+                        },
                         // finally
-                    () =>
+                        () =>
+                        {
+                            this.BackgroundDisplay(false);
+                        });
+                        exchangeCodeOperation.Run();
+                        break;
+                    }
+                case WizardState.AwaitingAuthorization:
                     {
-                        this.BackgroundDisplay(false);
-                    });
-                    awaitingAuthorizationOperation.Run();
-                    break;
+                        this.BackgroundDisplay(true);
+                        CredentialClaimResult result = null;
+                        var awaitingAuthorizationOperation = new AsyncOperationWithSynchronizationContext(() =>
+                        {
+                            var provider = this.credentialConfigurationProvier as IOAuth1CredentialConfigurationProvider;
+                            result = provider.Claim();
+                        },
+                        // continuation
+                        () =>
+                        {
+                            if (result.IsSuccess)
+                            {
+                                this.panelContainer.Controls.Remove(this.authorizationForm);
+                                this.successForm.SetResult(result, this.selectionForm.SelectedProvider);
+                                this.panelContainer.Controls.Add(this.successForm);
+                                this.wizardState = WizardState.Success;
+                                this.buttonCancel.Visible = false;
+                                this.buttonNext.Text = "Done";
+                            }
+                            else
+                            {
+                                MessageBox.Show("Couldn't authorize with account", "Error");
+                                this.StartOver();
+                            }
+                        },
+                        // catch
+                        ecxeption =>
+                        {
+                            MessageBox.Show(ecxeption.Message, "Error");
+                            this.StartOver();
+                        },
+                        // finally
+                        () =>
+                        {
+                            this.BackgroundDisplay(false);
+                        });
+                        awaitingAuthorizationOperation.Run();
+                        break;
+                    }
                 case WizardState.Success:
                     this.Close();
                     break;

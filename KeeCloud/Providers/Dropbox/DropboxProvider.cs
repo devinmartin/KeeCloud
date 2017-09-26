@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 
+using Dropbox.Api.Files;
+
 namespace KeeCloud.Providers.Dropbox
 {
     public class DropboxProvider : IProvider
@@ -13,8 +15,9 @@ namespace KeeCloud.Providers.Dropbox
         Stream IProvider.Get(ICredentials credentials)
         {
             var client = Api.AuthenticatedClient(this.GetNetworkCredential(credentials));
-            var data = client.GetFile(GetPath(this.Uri));
-            return new MemoryStream(data);
+            var task1 = client.Files.DownloadAsync(GetPath(this.Uri));
+            var task2 = task1.Result.GetContentAsStreamAsync();
+            return task2.Result;
         }
 
         void IProvider.Put(Stream stream, ICredentials credentials)
@@ -22,7 +25,9 @@ namespace KeeCloud.Providers.Dropbox
             var client = Api.AuthenticatedClient(this.GetNetworkCredential(credentials));
 
             var path = GetPath(this.Uri);
-            client.UploadFile(Path.GetDirectoryName(path), Path.GetFileName(path), this.ReadAll(stream));
+            var commit = new CommitInfo(path, mode: WriteMode.Overwrite.Instance, mute: true);
+            var task = client.Files.UploadAsync(commit, stream);
+            task.Wait();
         }
 
         void IProvider.Delete(ICredentials credentials)
@@ -30,7 +35,8 @@ namespace KeeCloud.Providers.Dropbox
             var client = Api.AuthenticatedClient(this.GetNetworkCredential(credentials));
 
             var path = GetPath(this.Uri);
-            client.Delete(path);
+            var task = client.Files.DeleteV2Async(path);
+            task.Wait();
         }
 
         void IProvider.Move(Uri destination, ICredentials credentials)
@@ -39,7 +45,8 @@ namespace KeeCloud.Providers.Dropbox
 
             var sourcePath = GetPath(this.Uri);
             var destinationPath = GetPath(destination);
-            client.Move(sourcePath, destinationPath);
+            var task = client.Files.MoveV2Async(new RelocationArg(sourcePath, destinationPath));
+            task.Wait();
         }
 
         bool IProvider.CanConfigureCredentials { get { return true; } }
@@ -58,7 +65,7 @@ namespace KeeCloud.Providers.Dropbox
 
         private static string GetPath(Uri uri)
         {
-            var path = uri.OriginalString.Substring(uri.Scheme.Length + 3);
+            var path = "/" + uri.OriginalString.Substring(uri.Scheme.Length + 3);
             if (path.EndsWith("/"))
                 return path.TrimEnd('/');
             else

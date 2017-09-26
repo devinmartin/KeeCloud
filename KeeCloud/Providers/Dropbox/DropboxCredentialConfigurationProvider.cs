@@ -1,41 +1,27 @@
-﻿using DropNet;
-using System;
+﻿using System;
 
 namespace KeeCloud.Providers.Dropbox
 {
-    public class DropboxCredentialConfigurationProvider : ICredentialConfigurationProvider
+    public class DropboxCredentialConfigurationProvider : IOAuth2CredentialConfigurationProvider
     {
-        private DropNetClient authenticationClient = Api.Client;
+        private string oauth2State;
 
         public InitializeResult Initialize()
         {
-            try
-            {
-                this.authenticationClient.GetToken();
-                return InitializeResult.Ok;
-            }
-            catch
-            {
-                return InitializeResult.Error;
-            }
+            this.oauth2State = Guid.NewGuid().ToString("N");
+            return InitializeResult.Ok;
         }
 
         public Uri GetExternalAuthorizationUrl()
         {
-            return new Uri(this.authenticationClient.BuildAuthorizeUrl());
+            return Api.GetAuthorizeUri(this.oauth2State);
         }
 
-        public CredentialClaimResult Claim()
+        public bool IsManual { get { return true; } }
+
+        public CredentialClaimResult ExchangeCode(string code)
         {
-            try
-            {
-                var result = this.authenticationClient.GetAccessToken();
-                return new CredentialClaimResult(result.Token, result.Secret);
-            }
-            catch
-            {
-                return new CredentialClaimResult();
-            }
+            return new CredentialClaimResult("", Api.ProcessCodeFlow(code));
         }
     }
 }

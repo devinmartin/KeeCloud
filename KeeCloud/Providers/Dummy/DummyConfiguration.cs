@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace KeeCloud.Providers.Dummy
 {
-    public class DummyConfiguration : ICredentialConfigurationProvider
+    public class DummyConfiguration : IOAuth1CredentialConfigurationProvider
     {
         private Uri uri;
 
