@@ -102,7 +102,6 @@ namespace KeeCloud.WebRequests
             {
                 var pwQuery = from pe in this.host.Database.GetAllPasswords()
                               where pe.EntryStringEquals(StandardProtectedStrings.Title, basicCredential.UserName) &&
-                                    pe.EntryStringNotNullOrEmpty(StandardProtectedStrings.Username) &&
                                     pe.EntryStringNotNullOrEmpty(StandardProtectedStrings.Password) &&
                                     pe.EntryStringExistsAndContidtionMet(StandardProtectedStrings.Url,
                                         value => ProtocolEqualsExpectedProtocol(value))
