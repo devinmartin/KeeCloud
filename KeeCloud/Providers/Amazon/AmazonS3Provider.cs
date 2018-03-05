@@ -22,7 +22,10 @@ namespace KeeCloud.Providers.Amazon
 
             using (var client = this.GetClient(credentials, region))
             {
-                var request = new GetObjectRequest().WithBucketName(bucket).WithKey(key);
+                var request = new GetObjectRequest {
+                    BucketName = bucket,
+                    Key = key
+                };
 
                 var response = client.GetObject(request);
 
@@ -42,7 +45,10 @@ namespace KeeCloud.Providers.Amazon
 
             using (var client = this.GetClient(credentials, region))
             {
-                var request = new PutObjectRequest().WithBucketName(bucket).WithKey(key);
+                var request = new PutObjectRequest {
+                    BucketName = bucket,
+                    Key = key
+                };
 
                 request.InputStream = stream;
                 client.PutObject(request);
@@ -58,7 +64,10 @@ namespace KeeCloud.Providers.Amazon
 
             using (var client = this.GetClient(credentials, region))
             {
-                var request = new DeleteObjectRequest().WithBucketName(bucket).WithKey(key);
+                var request = new DeleteObjectRequest {
+                    BucketName = bucket,
+                    Key = key
+                };
 
                 client.DeleteObject(request);
             }
@@ -75,10 +84,12 @@ namespace KeeCloud.Providers.Amazon
                 string destinationKey;
                 AmazonS3Provider.GetBucketAndKey(destination, out bucket, out destinationKey, out region);
 
-                var request = new CopyObjectRequest().WithSourceBucket(bucket)
-                    .WithDestinationBucket(bucket)
-                    .WithSourceKey(sourceKey)
-                    .WithDestinationKey(destinationKey);
+                var request = new CopyObjectRequest {
+                    SourceBucket = bucket,
+                    DestinationBucket = bucket,
+                    SourceKey = sourceKey,
+                    DestinationKey = destinationKey
+                };
 
                 client.CopyObject(request);
                 this.Delete(credentials);
